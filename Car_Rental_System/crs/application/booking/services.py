@@ -73,7 +73,7 @@ class BookingAppServices:
         """This method will return list of Bookings."""
         if not user.is_superuser:
             return self.bookings_services.get_booking_repo().filter(
-                user__id=user,
+                user__id=user.id,
                 vehicle__is_active=True,
                 is_active=True,
                 mark_as_deleted = False

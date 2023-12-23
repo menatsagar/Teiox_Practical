@@ -30,7 +30,7 @@ class UserViewSet(viewsets.ViewSet):
     def registration(self, request):
         serializer = self.get_serializer_class()
         serializer_data = serializer(data=request.data)
-        print(serializer_data)
+       
         if serializer_data.is_valid():
             try:
                 UserAppServices().create_user_from_dict(data=serializer_data.data)
@@ -125,26 +125,4 @@ class UserLogoutViewset(viewsets.ViewSet):
                 status_code=status.HTTP_400_BAD_REQUEST,
                 message="An error occurred while logout.",
             )
-        
-class UserBookingsViewSet(viewsets.ViewSet):
-        authentication_classes = (JWTAuthentication,)
-        permission_classes = (IsAuthenticated,)
-        
-        user_services = UserServices
 
-        @action(detail=True, methods=["get"], name="all_bookings")
-        def all_bookings(self, request, pk=None):
-      
-            get_serializer = UserBookingsSerializer
-            try:
-                user_obj = self.user_services().get_user_by_id(id=pk)
-                response = get_serializer(user_obj)
-                return CustomResponse(
-                    data=response.data, message="Successfully get booking."
-                )
-            except Exception as e:
-
-                return CustomResponse(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    message=str(e),
-                )
